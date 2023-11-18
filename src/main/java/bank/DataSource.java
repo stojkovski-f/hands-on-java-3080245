@@ -66,10 +66,19 @@ public class DataSource {
     return customer;
   }
 
-  public static void main(String[] args) {
-    Customer customer = getCustomer("twest8o@friendfeed.com");
-    Account account = getAccount(customer.getAccountId());
-    System.out.println(customer.getName());
-    System.out.println(account.getBalance());
+  public static void updateAccountBalance(int accountId, double balance){
+    String sql = "update account set balance = ? where id = ?";
+    try(
+      Connection connection = connect();
+      PreparedStatement statement = connection.prepareStatement(sql);
+    ){
+      statement.setDouble(1,balance);
+      statement.setInt(2,accountId);
+
+      statement.executeUpdate();
+
+    }catch(SQLException e){
+      e.printStackTrace();
+    }
   }
 }
